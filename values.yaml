@@ -1,0 +1,119 @@
+# Default values for headscale-ui.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/ifargle/headscale-webui
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+server: {} # Address of the server where Headscale is running
+domainName: {} # Domain Name of the application
+script: {} # /admin by default
+
+auth: # Authentification. Basic with user and pass or OIDC
+  type: Basic # Default Basic
+  log: Debug
+    # If type is Basic
+  name: 'admin'
+  pass: 'admin'
+    # If type is OIDC
+  oidc_url: https://localhost:8080
+  oidc_id: Headscale-WebUI
+  oidc_secret: secret
+
+service:
+  type: ClusterIP
+  port: 5000
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: http://example.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+persistence:
+  ## Data persitence using PVC. If false, use emptyDir
+  ##
+  enabled: true
+  ## PVC Storage Class; data volume.
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", sotrageClassName: "", which disables dynamic provisioning
+  ## If undefined, by default, or set to null, no storageClassName spec is set,
+  ##  chossing the default provisioner.
+  ##
+  storageClass: ""
+  ## Data volume mount path
+  ##
+  mountPath: /data
+  accessModes:
+    - ReadWriteOnce
+  size: 8Gi
+  annotations: {}
+  existingClaim: ""
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+configHeadscale: config.yaml # It is the headscale config. It can be define with kubectl --set-file configHeadscale="/path/to/config.yaml"

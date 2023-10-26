@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: ghcr.io/ifargle/headscale-webui
+  repository: ghcr.io/racoon-r/headscale-webui
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+  tag: "8.1"
 
 imagePullSecrets: []
 nameOverride: ""

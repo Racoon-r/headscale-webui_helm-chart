@@ -116,4 +116,4 @@ tolerations: []
 
 affinity: {}
 
-configHeadscale: config.yaml # It is the headscale config. It can be define with kubectl --set-file configHeadscale="/path/to/config.yaml"
+configHeadscale: {} # It is the headscale config.
